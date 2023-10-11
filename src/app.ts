@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import logger from "morgan";
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
 
 import { router } from "./routes/route";
 
