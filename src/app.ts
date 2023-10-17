@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import logger from "morgan";
 import bodyParser from "body-parser";
+import User from "./models/User";
+import sequelize from "./database/database";
 
 import { router } from "./routes/route";
 
@@ -16,3 +18,7 @@ app.use(bodyParser.json());
 
 // use user routes
 app.use("/users", router);
+
+sequelize.sync({ force: true }).then(() => {
+  console.log("Models synchronized with database");
+});

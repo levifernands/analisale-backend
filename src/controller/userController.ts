@@ -6,6 +6,7 @@ let users: { id: number; name: string; email: string }[] = [];
 
 export const getAllUsers = async (_req: Request, res: Response) => {
   try {
+    const users = await User.findAll();
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -16,7 +17,7 @@ export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const userId = parseInt(req.params.id);
-    const user = users.find((u) => u.id === userId);
+    const user = await User.findByPk(id);
     if (user) {
       res.json(user);
     } else {
@@ -29,10 +30,9 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
-  const newUser = { id: users.length + 1, name, email, password };
   try {
-    users.push(newUser);
-    res.json(newUser);
+    const newUser = await User.create({ name, email, password });
+    res.status(201).json(newUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -40,16 +40,16 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const userId = parseInt(req.params.id);
   const updatedUser = req.body;
   const { name, email, password } = req.body;
   try {
-    users = users.map((user) =>
-      user.id === userId ? { ...user, ...updatedUser } : user
+    const [updated] = await User.update(
+      { name, email, password },
+      { where: { id } }
     );
-    const user = users.find((u) => u.id === userId);
-    if (user) {
-      res.json(user);
+    if (updated) {
+      const updatedUser = await User.findByPk(id);
+      res.json(updatedUser);
     } else {
       res.status(404).json({ message: "User not found" });
     }
@@ -60,12 +60,10 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const userId = parseInt(id);
   try {
-    const deletedUserIndex = users.findIndex((user) => user.id === userId);
-    if (deletedUserIndex !== -1) {
-      const deletedUser = users[deletedUserIndex];
-      users = users.filter((user) => user.id !== userId);
+    const deletedUser = await User.findByPk(id);
+    if (deletedUser) {
+      await User.destroy({ where: { id } });
       res.json(deletedUser);
     } else {
       res.status(404).json({ message: "User not found" });
