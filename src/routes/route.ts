@@ -18,15 +18,15 @@ import {
 export const router = Router();
 
 //Users routes
-router.get("/", getAllUsers);
-router.get("/:id", getUserById);
-router.post("/", createUser);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
+router.get("/users/", getAllUsers);
+router.get("/users/:id", getUserById);
+router.post("/users", createUser);
+router.put("/users/:id", updateUser);
+router.delete("/users/:id", deleteUser);
 
 //Products routes
-router.get("/", getAllProducts);
-router.get("/:id", getProductById);
-router.post("/", createProduct);
-router.put("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+router.get("/products/", getAllProducts);
+router.get("/products/:id", getProductById);
+router.post("/products/", createProduct);
+router.put("/products/:id", updateProduct);
+router.delete("/products/:id", deleteProduct);

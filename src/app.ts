@@ -15,8 +15,7 @@ app.use(logger("dev"));
 // middleware
 app.use(bodyParser.json());
 
-app.use("/users", router);
-app.use("/products", router);
+app.use(router);
 
 sequelize.sync({ force: true }).then(() => {
   console.log("Models synchronized with database");
