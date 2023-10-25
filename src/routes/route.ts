@@ -15,6 +15,22 @@ import {
   deleteProduct,
 } from "../controller/productController";
 
+import {
+  getAllCharges,
+  getChargeById,
+  createCharge,
+  updateCharge,
+  deleteCharge,
+} from "../controller/chargeController";
+
+import {
+  getAllSales,
+  getSaleById,
+  createSale,
+  updateSale,
+  deleteSale,
+} from "../controller/saleController";
+
 export const router = Router();
 
 //Users routes
@@ -30,3 +46,18 @@ router.get("/products/:id", getProductById);
 router.post("/products/", createProduct);
 router.put("/products/:id", updateProduct);
 router.delete("/products/:id", deleteProduct);
+
+//Charge routes
+router.get("/charges/", getAllCharges);
+router.get("/charges/:id", getChargeById);
+router.post("/charges/", createCharge);
+router.put("/charges/:id", updateCharge);
+router.delete("/charges/:id", deleteCharge);
+
+//Sale routes
+
+router.get("/sales/", getAllSales);
+router.get("/sales/:id", getSaleById);
+router.post("/sales/", createSale);
+router.put("/sales/:id", updateSale);
+router.delete("/sales/:id", deleteSale);
