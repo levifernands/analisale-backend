@@ -25,9 +25,14 @@ export const getSaleById = async (req: Request, res: Response) => {
 };
 
 export const createSale = async (req: Request, res: Response) => {
-  const { productName, quantity, totalPrice } = req.body;
+  const { productName, quantity, totalPrice, productId } = req.body;
   try {
-    const newSale = await Sale.create({ productName, quantity, totalPrice });
+    const newSale = await Sale.create({
+      productName,
+      quantity,
+      totalPrice,
+      productId,
+    });
     res.status(201).json(newSale);
   } catch (error) {
     res.status(400).json({ message: error.message });

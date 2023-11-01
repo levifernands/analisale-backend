@@ -6,6 +6,7 @@ interface SaleAttributes {
   productName: string;
   quantity: number;
   totalPrice: number;
+  productId: number[];
 }
 
 class Sale extends Model<SaleAttributes> implements SaleAttributes {
@@ -13,6 +14,7 @@ class Sale extends Model<SaleAttributes> implements SaleAttributes {
   public productName!: string;
   public quantity!: number;
   public totalPrice!: number;
+  public productId!: number[];
 }
 
 Sale.init(
@@ -32,6 +34,10 @@ Sale.init(
     },
     totalPrice: {
       type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    productId: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
       allowNull: false,
     },
   },

@@ -6,6 +6,7 @@ interface UserAttributes {
   name: string;
   email: string;
   password: string;
+  userStatus: string;
 }
 
 class User extends Model<UserAttributes> implements UserAttributes {
@@ -13,6 +14,7 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public name!: string;
   public email!: string;
   public password!: string;
+  public userStatus!: string;
 }
 
 User.init(
@@ -35,10 +37,17 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    userStatus: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "ativo",
+    },
   },
   {
     sequelize,
+    modelName: "User",
     tableName: "users",
+    timestamps: true,
   }
 );
 
