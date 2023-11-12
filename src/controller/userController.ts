@@ -35,7 +35,7 @@ export const createUser = async (req: Request, res: Response) => {
       name,
       email,
       password,
-      userStatus: "ativo",
+      isActive: true,
     });
     res.status(201).json(newUser);
   } catch (error) {
@@ -82,13 +82,11 @@ export const disableUser = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const updatedUser = await User.update(
-      { userStatus: "desativado" },
-      { where: { id } }
-    );
+    const user = await User.findByPk(id);
 
-    if (updatedUser[0]) {
-      res.json({ message: "Account deactivated successfully" });
+    if (user) {
+      await user.update({ isActive: false });
+      res.json({ message: "User deactivated successfully" });
     } else {
       res.status(404).json({ message: "User not found" });
     }

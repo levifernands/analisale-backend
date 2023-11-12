@@ -1,12 +1,12 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/database";
+import Product from "./Product";
 
 interface SaleAttributes {
   id: number;
   productName: string;
   quantity: number;
   totalPrice: number;
-  productId: number[];
 }
 
 class Sale extends Model<SaleAttributes> implements SaleAttributes {
@@ -14,7 +14,8 @@ class Sale extends Model<SaleAttributes> implements SaleAttributes {
   public productName!: string;
   public quantity!: number;
   public totalPrice!: number;
-  public productId!: number[];
+
+  public setProducts: (product: Product[], options?: any) => Promise<Sale>;
 }
 
 Sale.init(
@@ -34,10 +35,6 @@ Sale.init(
     },
     totalPrice: {
       type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    productId: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
       allowNull: false,
     },
   },

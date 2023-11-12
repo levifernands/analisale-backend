@@ -6,7 +6,7 @@ interface UserAttributes {
   name: string;
   email: string;
   password: string;
-  userStatus: string;
+  isActive: boolean;
 }
 
 class User extends Model<UserAttributes> implements UserAttributes {
@@ -14,7 +14,7 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public name!: string;
   public email!: string;
   public password!: string;
-  public userStatus!: string;
+  public isActive!: boolean;
 }
 
 User.init(
@@ -37,10 +37,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    userStatus: {
-      type: DataTypes.STRING,
+    isActive: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: "ativo",
+      defaultValue: true,
     },
   },
   {
