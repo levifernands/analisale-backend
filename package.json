@@ -7,7 +7,7 @@
     "start": "ts-node src/server.ts",
     "build": "tsc",
     "dev": "nodemon --exec ts-node src/server.ts",
-    "swagger": "npx swagger-jsdoc -o docs/swagger-output.json ./src/routes/*.ts"
+    "swagger": "ts-node swagger.ts"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +22,7 @@
   "dependencies": {
     "@types/mongoose": "^5.11.97",
     "@types/sequelize": "^4.28.16",
+    "and": "^0.0.3",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -31,6 +32,7 @@
     "morgan": "^1.10.0",
     "mysql2": "^3.6.2",
     "sequelize": "^6.33.0",
+    "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.0"
   }
 }

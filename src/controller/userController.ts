@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 
-// in-memory array to store users
 let users: { id: number; name: string; email: string }[] = [];
 
 export const getAllUsers = async (_req: Request, res: Response) => {
