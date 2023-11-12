@@ -4,8 +4,7 @@ import logger from "morgan";
 import bodyParser from "body-parser";
 import sequelize from "./database/database";
 import swaggerUi from "swagger-ui-express";
-const swaggerDocument = require("./docs/swagger.json");
-
+import swaggerDocument from "../docs/swagger.json";
 import { router } from "./routes/route";
 
 export const app = express();
