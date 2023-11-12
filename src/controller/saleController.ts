@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Sale from "../models/Sale";
+import { Sale, Product } from "../models";
 
 export const getAllSales = async (_req: Request, res: Response) => {
   try {
@@ -25,9 +25,21 @@ export const getSaleById = async (req: Request, res: Response) => {
 };
 
 export const createSale = async (req: Request, res: Response) => {
-  const { productName, quantity, totalPrice } = req.body;
+  const { productName, quantity, totalPrice, productId } = req.body;
   try {
-    const newSale = await Sale.create({ productName, quantity, totalPrice });
+    const newSale = await Sale.create({
+      productName,
+      quantity,
+      totalPrice,
+    });
+
+    const products = await Product.findAll({ where: { id: productId } });
+    if (products.length > 0) {
+      await newSale.setProducts(products);
+    } else {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     res.status(201).json(newSale);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/database";
+import Product from "./Product";
 
 interface SaleAttributes {
   id: number;
@@ -13,6 +14,8 @@ class Sale extends Model<SaleAttributes> implements SaleAttributes {
   public productName!: string;
   public quantity!: number;
   public totalPrice!: number;
+
+  public setProducts: (product: Product[], options?: any) => Promise<Sale>;
 }
 
 Sale.init(

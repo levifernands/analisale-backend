@@ -5,6 +5,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  disableUser,
 } from "../controller/userController";
 
 import {
@@ -39,6 +40,7 @@ router.get("/users/:id", getUserById);
 router.post("/users", createUser);
 router.put("/users/:id", updateUser);
 router.delete("/users/:id", deleteUser);
+router.put("/users/disable/:id", disableUser);
 
 //Products routes
 router.get("/products/", getAllProducts);

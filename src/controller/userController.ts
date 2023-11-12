@@ -31,7 +31,12 @@ export const getUserById = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   try {
-    const newUser = await User.create({ name, email, password });
+    const newUser = await User.create({
+      name,
+      email,
+      password,
+      isActive: true,
+    });
     res.status(201).json(newUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -65,6 +70,23 @@ export const deleteUser = async (req: Request, res: Response) => {
     if (deletedUser) {
       await User.destroy({ where: { id } });
       res.json(deletedUser);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const disableUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findByPk(id);
+
+    if (user) {
+      await user.update({ isActive: false });
+      res.json({ message: "User deactivated successfully" });
     } else {
       res.status(404).json({ message: "User not found" });
     }

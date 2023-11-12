@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/database";
+import Sale from "./Sale";
 
 interface ProductAttributes {
   id: number;

@@ -6,6 +6,7 @@ interface UserAttributes {
   name: string;
   email: string;
   password: string;
+  isActive: boolean;
 }
 
 class User extends Model<UserAttributes> implements UserAttributes {
@@ -13,6 +14,7 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public name!: string;
   public email!: string;
   public password!: string;
+  public isActive!: boolean;
 }
 
 User.init(
@@ -35,10 +37,17 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
   },
   {
     sequelize,
+    modelName: "User",
     tableName: "users",
+    timestamps: true,
   }
 );
 
