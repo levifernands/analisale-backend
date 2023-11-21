@@ -1,0 +1,932 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Analisale Documentation",
+    "description": "This is the documentation for the Analisale API (in developmeent)",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:3000/users",
+      "description": "User API"
+    },
+    {
+      "url": "https://localhost:3000/products",
+      "description": "Product API"
+    },
+    {
+      "url": "https://localhost:3000/sales",
+      "description": "Sale API"
+    },
+    {
+      "url": "https://localhost:3000/charges",
+      "description": "Charge API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User",
+      "description": "Everything about user",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "Product",
+      "description": "Access to product orders",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "Sale",
+      "description": "Access to product orders",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "Charge",
+      "description": "Operations about user"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all users",
+        "description": "This route will list all users created",
+        "operationId": "getAllUsers",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "post": {
+        "tags": ["User"],
+        "summary": "Add a new user",
+        "description": "This route will create a new user",
+        "operationId": "createUser",
+        "requestBody": {
+          "description": "Create a new user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Find user by ID",
+        "description": "Returns a single user by its ID",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user to return",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Deletes user by ID",
+        "description": "This route will delete a user by its id",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID value"
+          }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "summary": "Update user by ID",
+        "description": "",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdated"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserUpdated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Get all products",
+        "description": "This route will list all products created",
+        "operationId": "getAllProducts",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Product"],
+        "summary": "Add a new Product",
+        "description": "This route will create a new product",
+        "operationId": "createProduct",
+        "requestBody": {
+          "description": "Create a new product",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Find product by ID",
+        "description": "Returns a single product by its ID",
+        "operationId": "getProductById",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID of product to return",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Product"],
+        "summary": "Deletes product by ID",
+        "description": "This route will delete a product by its id",
+        "operationId": "deleteProduct",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID value"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Product"],
+        "summary": "Update user by ID",
+        "description": "",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID of product to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sales": {
+      "get": {
+        "tags": ["Sale"],
+        "summary": "Get all sales",
+        "description": "This route will list all sales created",
+        "operationId": "getAllSales",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sale not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Sale"],
+        "summary": "Add a new Sale",
+        "description": "This route will create a new sale",
+        "operationId": "createSale",
+        "requestBody": {
+          "description": "Create a new sale",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Sale"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/sales/{saleId}": {
+      "get": {
+        "tags": ["Sale"],
+        "summary": "Find sale by ID",
+        "description": "Returns a single sale by its ID",
+        "operationId": "getSaleById",
+        "parameters": [
+          {
+            "name": "saleId",
+            "in": "path",
+            "description": "ID of sale to return",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Sale not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Sale"],
+        "summary": "Delete sale by ID",
+        "description": "This route will delete a sale by its id",
+        "operationId": "deleteSale",
+        "parameters": [
+          {
+            "name": "saleId",
+            "in": "path",
+            "description": "Sale id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID value"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Sale"],
+        "summary": "Update sale by ID",
+        "description": "",
+        "operationId": "updateSale",
+        "parameters": [
+          {
+            "name": "saleId",
+            "in": "path",
+            "description": "ID of sale to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Sale"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/charges": {
+      "get": {
+        "tags": ["Charge"],
+        "summary": "Get all charges",
+        "description": "This route will list all charges created",
+        "operationId": "getAllCharges",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Charge"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Charge not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Charge"],
+        "summary": "Add a new charge",
+        "description": "This route will create a new charge",
+        "operationId": "createCharge",
+        "requestBody": {
+          "description": "Create a new product",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Charge"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Charge"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/charges/{chargeId}": {
+      "get": {
+        "tags": ["Charge"],
+        "summary": "Find charge by ID",
+        "description": "Returns a single charge by its ID",
+        "operationId": "getChargeById",
+        "parameters": [
+          {
+            "name": "chargeId",
+            "in": "path",
+            "description": "ID of charge to return",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Charge"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Charge"],
+        "summary": "Deletes charge by ID",
+        "description": "This route will delete a charge by its id",
+        "operationId": "deleteCharge",
+        "parameters": [
+          {
+            "name": "chargeId",
+            "in": "path",
+            "description": "Charge id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Charge"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID value"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Charge"],
+        "summary": "Update charge by ID",
+        "description": "",
+        "operationId": "updateCharge",
+        "parameters": [
+          {
+            "name": "chargeId",
+            "in": "path",
+            "description": "ID of charge to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Charge"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+          },
+          "name": {
+            "type": "string",
+            "example": "Produto A"
+          },
+          "amount": {
+            "type": "integer",
+            "example": 7
+          },
+          "purchaseValue": {
+            "type": "integer",
+            "example": 10.99
+          },
+          "saleValue": {
+            "type": "integer",
+            "example": 20.99
+          }
+        }
+      },
+      "Charge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+          },
+          "name": {
+            "type": "string",
+            "example": "Tax"
+          },
+          "value": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "integer",
+            "example": 0
+          }
+        }
+      },
+      "Sale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": 1
+          },
+          "products": {
+            "type": "array",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+              },
+              "amount": {
+                "type": "integer",
+                "example": 1
+              }
+            }
+          },
+          "charges": {
+            "type": "array",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+              }
+            }
+          },
+          "totalPrice": {
+            "type": "integer",
+            "example": 20
+          }
+        }
+      },
+      "UserUpdated": {
+        "required": ["name", "email", "password"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+          },
+          "name": {
+            "type": "string",
+            "example": "Adryano Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "adryano.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "passwordupdated123"
+          }
+        }
+      },
+      "User": {
+        "required": ["name", "email", "password"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+          },
+          "name": {
+            "type": "string",
+            "example": "Adriano Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "adriano.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "User": {
+        "description": "User object that needs to be added",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "UserArray": {
+        "description": "List of users",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      },
+      "Product": {
+        "description": "Product object that needs to be added",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Product"
+            }
+          }
+        }
+      },
+      "ProductArray": {
+        "description": "List of products",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Product"
+            }
+          }
+        }
+      },
+      "Sale": {
+        "description": "Sales object that needs to be added",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Sale"
+            }
+          }
+        }
+      },
+      "SaleArray": {
+        "description": "List of sales",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Sale"
+            }
+          }
+        }
+      },
+      "Charge": {
+        "description": "Charges object that needs to be added",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Charge"
+            }
+          }
+        }
+      },
+      "ChargeArray": {
+        "description": "List of charges",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Charge"
+            }
+          }
+        }
+      }
+    }
+  }
+}
