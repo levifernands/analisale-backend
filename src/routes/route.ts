@@ -1,4 +1,9 @@
 import { Router } from "express";
+import { authenticate } from "../controller/authController";
+
+import { authenticateToken } from "../authentication/authMiddleware";
+import * as bcrypt from "bcrypt";
+import { generateToken } from "../authentication/jwtUtils";
 import {
   getAllUsers,
   getUserById,
@@ -63,3 +68,11 @@ router.get("/sales/:id", getSaleById);
 router.post("/sales/", createSale);
 router.put("/sales/:id", updateSale);
 router.delete("/sales/:id", deleteSale);
+
+//Autenticação
+router.post("/login", authenticate);
+
+router.post("/recurso-protegido", authenticateToken, (req, res) => {
+  // Se chegou até aqui, o token foi validado
+  res.json({ message: "Recurso protegido", user: (req as any).user });
+});

@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/database";
+import * as bcrypt from "bcrypt";
 
 interface UserAttributes {
   id: number;
@@ -29,12 +30,12 @@ User.init(
       allowNull: false,
     },
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(128),
       allowNull: false,
       unique: true,
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(128),
       allowNull: false,
     },
     isActive: {
@@ -48,6 +49,12 @@ User.init(
     modelName: "User",
     tableName: "users",
     timestamps: true,
+    hooks: {
+      beforeCreate: async (user: User) => {
+        // Antes de criar o usuário, criptografa a senha
+        user.password = await bcrypt.hash(user.password, 10);
+      },
+    },
   }
 );
 
