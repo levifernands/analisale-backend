@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
+import * as bcrypt from "bcrypt";
 
 let users: { id: number; name: string; email: string }[] = [];
 
