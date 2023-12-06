@@ -8,114 +8,76 @@
   "host": "localhost:3000",
   "basePath": "/",
   "schemes": ["http"],
+  "tags": [
+    { "name": "User", "description": "Operations related to users" },
+    { "name": "Product", "description": "Operations related to products" },
+    { "name": "Charge", "description": "Operations related to charges" },
+    { "name": "Sale", "description": "Operations related to sales" }
+  ],
   "paths": {
     "/users/": {
       "get": {
-        "tags": ["User"],
-        "description": "",
+        "description": "Get a list of users",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["User"]
       }
     },
     "/users/{id}": {
       "get": {
-        "tags": ["User"],
-        "description": "",
+        "description": "Get a user by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["User"]
       },
       "put": {
-        "tags": ["User"],
-        "description": "",
+        "description": "Update a user by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
+          { "name": "id", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "User test"
-                },
-                "email": {
-                  "example": "user.test@example.com"
-                },
-                "password": {
-                  "example": "1234"
-                }
+                "name": { "example": "John Doe" },
+                "email": { "example": "john.doe@example.com" },
+                "password": { "example": "newpassword" }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" }
+        },
+        "tags": ["User"]
       },
       "delete": {
-        "tags": ["User"],
-        "description": "",
+        "description": "Delete a user by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["User"]
       }
     },
     "/users": {
       "post": {
-        "tags": ["User"],
-        "description": "",
+        "description": "Create a new user",
         "parameters": [
           {
             "name": "body",
@@ -123,70 +85,45 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "User test"
-                },
-                "email": {
-                  "example": "user.test@example.com"
-                },
-                "password": {
-                  "example": "1234"
-                }
+                "name": { "example": "John Doe" },
+                "email": { "example": "john.doe@example.com" },
+                "password": { "example": "password123" }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" }
+        },
+        "tags": ["User"]
       }
     },
     "/users/disable/{id}": {
       "put": {
-        "tags": ["User"],
-        "description": "",
+        "description": "Disable a user by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["User"]
       }
     },
     "/products/": {
       "get": {
-        "tags": ["Product"],
-        "description": "",
+        "description": "Get a list of products",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Product"]
       },
       "post": {
-        "tags": ["Product"],
-        "description": "",
+        "description": "Create a new product",
         "parameters": [
           {
             "name": "body",
@@ -194,146 +131,83 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "Produto 1"
-                },
-                "price": {
-                  "example": 10.99
-                },
-                "type": {
-                  "example": 1
-                },
-                "amount": {
-                  "example": 1
-                },
-                "salePurchase": {
-                  "example": 13.99
-                }
+                "amount": { "example": 10 },
+                "name": { "example": "Product A" },
+                "purchaseValue": { "example": 50.0 },
+                "saleValue": { "example": 80.0 }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" }
+        },
+        "tags": ["Product"]
       }
     },
     "/products/{id}": {
       "get": {
-        "tags": ["Product"],
-        "description": "",
+        "description": "Get a product by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Product"]
       },
       "put": {
-        "tags": ["Product"],
-        "description": "",
+        "description": "Update a product by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
+          { "name": "id", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "Produto 1 (atualização)"
-                },
-                "price": {
-                  "example": 10.0
-                },
-                "type": {
-                  "example": 2
-                },
-                "amount": {
-                  "example": 2
-                },
-                "salePurchase": {
-                  "example": 15.0
-                }
+                "amount": { "example": 15 },
+                "name": { "example": "Updated Product A" },
+                "purchaseValue": { "example": 60.0 },
+                "saleValue": { "example": 90.0 }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" }
+        },
+        "tags": ["Product"]
       },
       "delete": {
-        "tags": ["Product"],
-        "description": "",
+        "description": "Delete a product by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Product"]
       }
     },
     "/charges/": {
       "get": {
-        "tags": ["Charge"],
-        "description": "",
+        "description": "Get a list of charges",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Charge"]
       },
       "post": {
-        "tags": ["Charge"],
-        "description": "",
+        "description": "Create a new charge",
         "parameters": [
           {
             "name": "body",
@@ -341,128 +215,81 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "Tax"
-                },
-                "amount": {
-                  "example": 22
-                }
+                "name": { "example": "IOF" },
+                "value": { "example": 0.5 },
+                "type": { "example": 0 }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" }
+        },
+        "tags": ["Charge"]
       }
     },
     "/charges/{id}": {
       "get": {
-        "tags": ["Charge"],
-        "description": "",
+        "description": "Get a charge by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Charge"]
       },
       "put": {
-        "tags": ["Charge"],
-        "description": "",
+        "description": "Update a charge by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
+          { "name": "id", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "Tax (atualização)"
-                },
-                "amount": {
-                  "example": 23
-                }
+                "name": { "example": "IOF (Atualizado)" },
+                "value": { "example": 1.0 },
+                "type": { "example": 0 }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" }
+        },
+        "tags": ["Charge"]
       },
       "delete": {
-        "tags": ["Charge"],
-        "description": "",
+        "description": "Delete a charge by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Charge"]
       }
     },
     "/sales/": {
       "get": {
-        "tags": ["Sale"],
-        "description": "",
+        "description": "Get a list of sales",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Sale"]
       },
       "post": {
-        "tags": ["Sale"],
-        "description": "",
+        "description": "Create a new sale",
         "parameters": [
           {
             "name": "body",
@@ -470,121 +297,101 @@
             "schema": {
               "type": "object",
               "properties": {
-                "productName": {
-                  "example": "Venda 1"
-                },
-                "quantity": {
-                  "example": 1
-                },
-                "totalPrice": {
-                  "example": 20
-                },
-                "productId": {
-                  "example": [1, 2]
-                }
+                "products": { "example": ["Product A", "Product B"] },
+                "charges": { "example": [0, 1] }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" }
+        },
+        "tags": ["Sale"]
       }
     },
     "/sales/{id}": {
       "get": {
-        "tags": ["Sale"],
-        "description": "",
+        "description": "Get a sale by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Sale"]
       },
       "put": {
-        "tags": ["Sale"],
-        "description": "",
+        "description": "Update a sale by ID",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
+          { "name": "id", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "productName": {
-                  "example": "Venda 1 (atualização)"
-                },
-                "quantity": {
-                  "example": 1
-                },
-                "totalPrice": {
-                  "example": 30
-                }
+                "products": { "example": ["Updated Product A", "Product B"] },
+                "charges": { "example": [0, 1] }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" }
+        },
+        "tags": ["Sale"]
       },
       "delete": {
-        "tags": ["Sale"],
-        "description": "",
+        "description": "Delete a sale by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Sale"]
+      }
+    },
+    "/login": {
+      "post": {
+        "description": "Authenticate a user",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": { "example": "john.doe@example.com" },
+                "password": { "example": "password123" }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "401": { "description": "Unauthorized" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/recurso-protegido": {
+      "post": {
+        "description": "Access a protected resource",
+        "parameters": [
+          { "name": "authorization", "in": "header", "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" }
         }
       }
     }
