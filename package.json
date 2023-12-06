@@ -34,6 +34,7 @@
     "mysql2": "^3.6.2",
     "sequelize": "^6.33.0",
     "swagger-autogen": "^2.23.7",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "uuid": "^9.0.1"
   }
 }
