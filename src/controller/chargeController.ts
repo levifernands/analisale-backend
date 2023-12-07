@@ -2,17 +2,14 @@ import { Request, Response } from "express";
 import Charge, { ChargeTypes } from "../models/Charge";
 import { v4 as uuidv4 } from "uuid";
 
-const validateChargeValue = (res: Response, value: any) => {
+const validateChargeValue = (value: any) => {
   const isValidValue = typeof value === "number" && value > 0 && value <= 100;
 
   if (!isValidValue)
-    res.status(400).json({
-      message: `Valor do encargo deve ser maior que 0 e menor que 100. Valor: ${value}`,
-    });
+    throw new Error(`Encargo já cadastrado com todos os valores fornecidos.`);
 };
 
 const validateChargeObject = async (
-  res: Response,
   name: string,
   value: number
 ): Promise<void> => {
@@ -20,22 +17,18 @@ const validateChargeObject = async (
     const chargeResult = await Charge.searchByNameAndValue(name, value);
 
     if (chargeResult.length > 0)
-      res.status(400).json({
-        message: `Encargo já cadastrado com todos os valores fornecidos.`,
-      });
+      throw new Error(`Encargo já cadastrado com todos os valores fornecidos.`);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    throw error;
   }
 };
 
-const validateChargeType = (res: Response, type: ChargeTypes) => {
+const validateChargeType = (type: ChargeTypes) => {
   if (
     typeof type !== "number" ||
     (type !== ChargeTypes.Tax && type !== ChargeTypes.Discount)
   ) {
-    res.status(400).json({
-      message: `Tipo de encargo invalido. Tipo fornecido: ${type}`,
-    });
+    throw new Error(`Tipo de encargo invalido. Tipo fornecido: ${type}`);
   }
 };
 
@@ -66,12 +59,12 @@ export const getChargeById = async (req: Request, res: Response) => {
 export const createCharge = async (req: Request, res: Response) => {
   const { name, value, type } = req.body;
 
-  validateChargeValue(res, value);
-  validateChargeType(res, type);
-
-  await validateChargeObject(res, name as string, value as number);
-
   try {
+    validateChargeValue(value);
+    validateChargeType(type);
+
+    await validateChargeObject(name as string, value as number);
+
     const newCharge = await Charge.create({ id: uuidv4(), name, type, value });
 
     res.status(201).json(newCharge);
@@ -85,12 +78,12 @@ export const updateCharge = async (req: Request, res: Response) => {
 
   const { name, value, type } = req.body;
 
-  validateChargeValue(res, value);
-  validateChargeType(res, type);
-
-  await validateChargeObject(res, name as string, value as number);
-
   try {
+    validateChargeValue(value);
+    validateChargeType(type);
+
+    await validateChargeObject(name as string, value as number);
+
     const [count] = await Charge.update(
       { name, type, value },
       { where: { id } }

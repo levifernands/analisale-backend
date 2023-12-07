@@ -75,7 +75,7 @@ Charge.searchByNameAndValue = async (
   return Charge.findAll({
     where: {
       name: {
-        [Op.iLike]: `%${name}%`,
+        [Op.like]: `%${name}%`,
       },
       value: {
         [Op.eq]: value,
