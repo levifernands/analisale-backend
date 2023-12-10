@@ -5,34 +5,28 @@ import Charge, { ChargeTypes } from "../models/Charge";
 import { v4 as uuidv4 } from "uuid";
 
 const verifyProductsAndGetSum = async (
-  res: Response,
   saleProducts: SaleProduct[]
 ): Promise<number> => {
   let totalProductsValue: number = 0;
 
-  if (!saleProducts || saleProducts.length === 0) {
-    res.status(400).json({ message: "Atributo de produtos inválidos" });
-    return;
-  }
+  if (!saleProducts || saleProducts.length === 0)
+    throw new Error("Atributo de produtos inválidos");
 
   saleProducts.forEach(async (product) => {
     try {
       const productSale = await Product.findByPk(product.id);
 
       if (productSale.amount < product.amount) {
-        res.status(400).json({
-          message: `Produto com id ${product.id} não possui ${product.amount} unidades em estoque.`,
-        });
-        return;
+        throw new Error(
+          `Produto com id ${product.id} não possui ${product.amount} unidades em estoque.`
+        );
       }
 
       totalProductsValue += productSale.saleValue * product.amount;
 
       // TODO: deduzir valor do banco
     } catch (err) {
-      res
-        .status(404)
-        .json({ message: `Produto com id ${product.id} não encontrado.` });
+      throw err;
     }
   });
 
@@ -40,7 +34,6 @@ const verifyProductsAndGetSum = async (
 };
 
 const verifyChargesAndGetSum = async (
-  res: Response,
   saleCharges: string[]
 ): Promise<number | undefined> => {
   const hasCharges = saleCharges && saleCharges.length !== 0;
@@ -58,9 +51,7 @@ const verifyChargesAndGetSum = async (
           ? totalChargesValue + chargeSale.value
           : totalChargesValue - chargeSale.value;
     } catch (err) {
-      res
-        .status(404)
-        .json({ message: `Encargo com id ${chargeId} não encontrado.` });
+      throw err;
     }
   });
 
@@ -107,15 +98,15 @@ export const createSale = async (req: Request, res: Response) => {
   const saleProducts = products as SaleProduct[];
   const saleCharges = charges as string[];
 
-  const totalProductsValue = await verifyProductsAndGetSum(res, saleProducts);
-  const totalChargesValue = await verifyChargesAndGetSum(res, saleCharges);
-
-  const totalSaleValue: number = getTotalSaleValue(
-    totalProductsValue,
-    totalChargesValue
-  );
-
   try {
+    const totalProductsValue = await verifyProductsAndGetSum(saleProducts);
+    const totalChargesValue = await verifyChargesAndGetSum(saleCharges);
+
+    const totalSaleValue: number = getTotalSaleValue(
+      totalProductsValue,
+      totalChargesValue
+    );
+
     const newSale = await Sale.create({
       id: uuidv4(),
       charges: saleCharges,
@@ -137,8 +128,8 @@ export const updateSale = async (req: Request, res: Response) => {
   const saleCharges = charges as string[];
 
   try {
-    const totalProductsValue = await verifyProductsAndGetSum(res, saleProducts);
-    const totalChargesValue = await verifyChargesAndGetSum(res, saleCharges);
+    const totalProductsValue = await verifyProductsAndGetSum(saleProducts);
+    const totalChargesValue = await verifyChargesAndGetSum(saleCharges);
 
     const totalSalePrice = getTotalSaleValue(
       totalProductsValue,

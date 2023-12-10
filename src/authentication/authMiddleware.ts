@@ -1,8 +1,9 @@
+// authentication/AuthMiddleware.ts
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "./jwtUtils";
 
 interface AuthenticatedRequest extends Request {
-  email?: string;
+  user?: { email: string };
 }
 
 function authenticateToken(
@@ -30,14 +31,17 @@ function authenticateToken(
 
   const emailOrNull = verifyToken(token);
 
-  if (!emailOrNull || typeof emailOrNull !== 'string') {
+  if (!emailOrNull || typeof emailOrNull !== "string") {
     res.status(403).json({ message: "Token inválido" });
     return;
   }
-  const email = emailOrNull;
 
-  // Adicionando a propriedade 'email' ao objeto Request
-  req.email = email;
+  const email = emailOrNull;
+  console.log("Token válido, usuário autenticado:", email);
+
+  // Adicionando a propriedade 'user' ao objeto Request
+  req.user = { email };
+
   next();
 }
 
