@@ -79,9 +79,19 @@ Product.searchByName = async (name: string): Promise<Product[] | null> => {
   return Product.findAll({
     where: {
       name: {
+<<<<<<< HEAD
         [Op.iLike]: `%${name}%`, // Case-insensitive matching
       },
     },
+=======
+        [Op.like]: `%${name}%`, // Case-insensitive matching for PostgreSQL
+        // For MySQL, use the following:
+        // [Op.like]: `%${name}%`,
+      },
+    },
+    // For MySQL, add collate option for case-insensitive matching:
+    // collate: { collation: 'utf8_general_ci' },
+>>>>>>> origin/add-rules
   });
 };
 

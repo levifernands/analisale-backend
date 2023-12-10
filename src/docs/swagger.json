@@ -721,22 +721,38 @@
         "type": "object",
         "properties": {
           "id": {
+<<<<<<< HEAD
             "type": "integer",
             "example": 10
+=======
+            "type": "string",
+            "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+>>>>>>> origin/add-rules
           },
           "name": {
             "type": "string",
             "example": "Produto A"
           },
+<<<<<<< HEAD
           "type": {
             "type": "integer",
             "example": 1
           },
+=======
+>>>>>>> origin/add-rules
           "amount": {
             "type": "integer",
             "example": 7
           },
+<<<<<<< HEAD
           "salePurchase": {
+=======
+          "purchaseValue": {
+            "type": "integer",
+            "example": 10.99
+          },
+          "saleValue": {
+>>>>>>> origin/add-rules
             "type": "integer",
             "example": 20.99
           }
@@ -746,16 +762,31 @@
         "type": "object",
         "properties": {
           "id": {
+<<<<<<< HEAD
             "type": "integer",
             "example": 1
+=======
+            "type": "string",
+            "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+>>>>>>> origin/add-rules
           },
           "name": {
             "type": "string",
             "example": "Tax"
           },
+<<<<<<< HEAD
           "amount": {
             "type": "integer",
             "example": 1
+=======
+          "value": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "integer",
+            "example": 0
+>>>>>>> origin/add-rules
           }
         }
       },
@@ -763,6 +794,7 @@
         "type": "object",
         "properties": {
           "id": {
+<<<<<<< HEAD
             "type": "integer",
             "example": 1
           },
@@ -774,6 +806,33 @@
             "type": "integer",
             "example": 1
           },
+=======
+            "type": "string",
+            "example": 1
+          },
+          "products": {
+            "type": "array",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+              },
+              "amount": {
+                "type": "integer",
+                "example": 1
+              }
+            }
+          },
+          "charges": {
+            "type": "array",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+              }
+            }
+          },
+>>>>>>> origin/add-rules
           "totalPrice": {
             "type": "integer",
             "example": 20
@@ -785,8 +844,13 @@
         "type": "object",
         "properties": {
           "id": {
+<<<<<<< HEAD
             "type": "integer",
             "example": 1
+=======
+            "type": "string",
+            "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+>>>>>>> origin/add-rules
           },
           "name": {
             "type": "string",
@@ -807,9 +871,14 @@
         "type": "object",
         "properties": {
           "id": {
+<<<<<<< HEAD
             "type": "integer",
             "format": "int64",
             "example": 1
+=======
+            "type": "string",
+            "example": "5c3500b1-6a6f-4ce9-8120-0b93344f27c4"
+>>>>>>> origin/add-rules
           },
           "name": {
             "type": "string",

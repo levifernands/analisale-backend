@@ -65,8 +65,11 @@ Sale.init(
               throw new Error(
                 'Cada item em "products" deve ter a propriedade "amount" > 0 e != NULL.'
               );
+<<<<<<< HEAD
             // Aqui você deve implementar a lógica para verificar se o product.id existe no banco de dados.
             // Você também precisa verificar a regra de quantidade (product.amount <= quantidade disponível no banco).
+=======
+>>>>>>> origin/add-rules
           }
         },
       },

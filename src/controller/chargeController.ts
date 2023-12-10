@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 import Charge, { ChargeTypes } from "../models/Charge";
+<<<<<<< HEAD
+=======
+import { v4 as uuidv4 } from "uuid";
+>>>>>>> origin/add-rules
 
 const validateChargeValue = (res: Response, value: any) => {
   const isValidValue = typeof value === "number" && value > 0 && value <= 100;
@@ -71,7 +75,11 @@ export const createCharge = async (req: Request, res: Response) => {
   await validateChargeObject(res, name as string, value as number);
 
   try {
+<<<<<<< HEAD
     const newCharge = await Charge.create({ name, type, value });
+=======
+    const newCharge = await Charge.create({ id: uuidv4(), name, type, value });
+>>>>>>> origin/add-rules
 
     res.status(201).json(newCharge);
   } catch (error) {

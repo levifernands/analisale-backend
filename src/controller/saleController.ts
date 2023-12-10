@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import Sale, { SaleProduct } from "../models/Sale";
 import Product from "../models/Product";
 import Charge, { ChargeTypes } from "../models/Charge";
+<<<<<<< HEAD
+=======
+import { v4 as uuidv4 } from "uuid";
+>>>>>>> origin/add-rules
 
 const verifyProductsAndGetSum = async (
   res: Response,
@@ -116,6 +120,10 @@ export const createSale = async (req: Request, res: Response) => {
 
   try {
     const newSale = await Sale.create({
+<<<<<<< HEAD
+=======
+      id: uuidv4(),
+>>>>>>> origin/add-rules
       charges: saleCharges,
       products: saleProducts,
       totalPrice: totalSaleValue,
