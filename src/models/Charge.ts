@@ -11,6 +11,7 @@ interface ChargeAttributes {
   name: string;
   value: number;
   type: ChargeTypes;
+  userId: number;
 }
 
 class Charge extends Model<ChargeAttributes> implements ChargeAttributes {
@@ -18,6 +19,7 @@ class Charge extends Model<ChargeAttributes> implements ChargeAttributes {
   public name!: string;
   public value!: number;
   public type!: ChargeTypes;
+  public userId!: number;
 
   static searchByNameAndValue: (
     name: string,
@@ -60,6 +62,10 @@ Charge.init(
           msg: "O tipo de encargo deve ser Taxa ou Desconto.",
         },
       },
+    },
+    userId: {
+      type: DataTypes.INTEGER, // Conforme a abstração
+      allowNull: false,
     },
   },
   {

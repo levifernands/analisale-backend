@@ -3,6 +3,7 @@ import Sale, { SaleProduct } from "../models/Sale";
 import Product from "../models/Product";
 import Charge, { ChargeTypes } from "../models/Charge";
 import { v4 as uuidv4 } from "uuid";
+import { AuthenticatedRequest } from "../authentication/authMiddleware";
 
 const verifyProductsAndGetSum = async (
   saleProducts: SaleProduct[]
@@ -12,9 +13,13 @@ const verifyProductsAndGetSum = async (
   if (!saleProducts || saleProducts.length === 0)
     throw new Error("Atributo de produtos inválidos");
 
-  saleProducts.forEach(async (product) => {
+  for (const product of saleProducts) {
     try {
       const productSale = await Product.findByPk(product.id);
+
+      if (!productSale) {
+        throw new Error(`Produto com ID ${product.id} não encontrado`);
+      }
 
       if (productSale.amount < product.amount) {
         throw new Error(
@@ -28,7 +33,7 @@ const verifyProductsAndGetSum = async (
     } catch (err) {
       throw err;
     }
-  });
+  }
 
   return totalProductsValue;
 };
@@ -42,18 +47,22 @@ const verifyChargesAndGetSum = async (
 
   let totalChargesValue: number = 0;
 
-  saleCharges.forEach(async (chargeId) => {
+  for (const chargeId of saleCharges) {
     try {
       const chargeSale = await Charge.findByPk(chargeId);
 
-      totalChargesValue =
-        chargeSale.type === ChargeTypes.Tax
-          ? totalChargesValue + chargeSale.value
-          : totalChargesValue - chargeSale.value;
+      if (chargeSale) {
+        totalChargesValue +=
+          chargeSale.type === ChargeTypes.Tax
+            ? chargeSale.value
+            : -chargeSale.value;
+      } else {
+        console.error(`Encargo com ID ${chargeId} não encontrada.`);
+      }
     } catch (err) {
       throw err;
     }
-  });
+  }
 
   return totalChargesValue;
 };
@@ -62,24 +71,31 @@ const getTotalSaleValue = (
   totalProductsValue: number,
   totalChargesValue: number | undefined
 ): number => {
-  const ChargesOnProducts: number =
-    totalProductsValue * (totalChargesValue ? totalChargesValue : 1);
-
-  return totalProductsValue + ChargesOnProducts;
+  const chargesMultiplier = totalChargesValue ?? 1;
+  return totalProductsValue * chargesMultiplier;
 };
 
-export const getAllSales = async (_req: Request, res: Response) => {
+export const getAllSales = async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.user?.userId;
   try {
-    const sales = await Sale.findAll();
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+    const sales = await Sale.findAll({ where: { userId } });
     res.json(sales);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const getSaleById = async (req: Request, res: Response) => {
+export const getSaleById = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
+  const userId = req.user?.userId;
   try {
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+
     const sale = await Sale.findByPk(id);
 
     if (sale) {
@@ -92,11 +108,13 @@ export const getSaleById = async (req: Request, res: Response) => {
   }
 };
 
-export const createSale = async (req: Request, res: Response) => {
+export const createSale = async (req: AuthenticatedRequest, res: Response) => {
   const { products, charges } = req.body;
 
   const saleProducts = products as SaleProduct[];
   const saleCharges = charges as string[];
+
+  const userId = req.user?.userId;
 
   try {
     const totalProductsValue = await verifyProductsAndGetSum(saleProducts);
@@ -112,6 +130,7 @@ export const createSale = async (req: Request, res: Response) => {
       charges: saleCharges,
       products: saleProducts,
       totalPrice: totalSaleValue,
+      userId,
     });
 
     res.status(201).json(newSale);
@@ -120,14 +139,19 @@ export const createSale = async (req: Request, res: Response) => {
   }
 };
 
-export const updateSale = async (req: Request, res: Response) => {
+export const updateSale = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
   const { products, charges } = req.body;
 
   const saleProducts = products as SaleProduct[];
   const saleCharges = charges as string[];
 
+  const userId = req.user?.userId;
+
   try {
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
     const totalProductsValue = await verifyProductsAndGetSum(saleProducts);
     const totalChargesValue = await verifyChargesAndGetSum(saleCharges);
 
@@ -142,7 +166,7 @@ export const updateSale = async (req: Request, res: Response) => {
         products: saleProducts,
         totalPrice: totalSalePrice,
       },
-      { where: { id } }
+      { where: { id, userId } }
     );
 
     if (count > 0) {
@@ -157,13 +181,18 @@ export const updateSale = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteSale = async (req: Request, res: Response) => {
+export const deleteSale = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
+  const userId = req.user?.userId;
 
   try {
-    const deletedSale = await Sale.findByPk(id);
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+
+    const deletedSale = await Sale.findOne({ where: { id, userId } });
     if (deletedSale) {
-      await Sale.destroy({ where: { id } });
+      await Sale.destroy({ where: { id, userId } });
 
       res.json(deletedSale);
     } else {

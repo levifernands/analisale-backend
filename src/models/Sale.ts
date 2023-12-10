@@ -15,6 +15,7 @@ interface SaleAttributes {
   products: SaleProduct[];
   charges: string[];
   totalPrice: number;
+  userId: number;
 }
 
 class Sale extends Model<SaleAttributes> implements SaleAttributes {
@@ -22,6 +23,7 @@ class Sale extends Model<SaleAttributes> implements SaleAttributes {
   public products!: SaleProduct[];
   public charges!: string[];
   public totalPrice!: number;
+  public userId!: number;
 }
 
 Sale.init(
@@ -96,6 +98,10 @@ Sale.init(
           }
         },
       },
+    },
+    userId: {
+      type: DataTypes.INTEGER, // Conforme a abstração
+      allowNull: false,
     },
   },
   {
