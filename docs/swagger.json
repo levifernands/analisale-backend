@@ -2,9 +2,22 @@
   "swagger": "2.0",
   "info": {
     "title": "Analisale Documentation",
-    "description": "This is the documentation for the Analisale API (in development)",
+    "description": "This is the documentation for the Analisale API (in development).",
     "version": "1.0.0"
   },
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "When using authorization, use the 'Bearer' prefix followed by a space and then the token. For example: 'Bearer <your-actual-token-value>'"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
   "host": "localhost:3000",
   "basePath": "/",
   "schemes": ["http"],
@@ -12,71 +25,16 @@
     { "name": "User", "description": "Operations related to users" },
     { "name": "Product", "description": "Operations related to products" },
     { "name": "Charge", "description": "Operations related to charges" },
-    { "name": "Sale", "description": "Operations related to sales" }
+    { "name": "Sale", "description": "Operations related to sales" },
+    {
+      "name": "Authorization",
+      "description": "Operations related to authentication and authorization"
+    }
   ],
   "paths": {
     "/users/": {
-      "get": {
-        "description": "Get a list of users",
-        "responses": {
-          "200": { "description": "OK" },
-          "500": { "description": "Internal Server Error" }
-        },
-        "tags": ["User"]
-      }
-    },
-    "/users/{id}": {
-      "get": {
-        "description": "Get a user by ID",
-        "parameters": [
-          { "name": "id", "in": "path", "required": true, "type": "string" }
-        ],
-        "responses": {
-          "200": { "description": "OK" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
-        },
-        "tags": ["User"]
-      },
-      "put": {
-        "description": "Update a user by ID",
-        "parameters": [
-          { "name": "id", "in": "path", "required": true, "type": "string" },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": { "example": "John Doe" },
-                "email": { "example": "john.doe@example.com" },
-                "password": { "example": "newpassword" }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": { "description": "OK" },
-          "400": { "description": "Bad Request" },
-          "404": { "description": "Not Found" }
-        },
-        "tags": ["User"]
-      },
-      "delete": {
-        "description": "Delete a user by ID",
-        "parameters": [
-          { "name": "id", "in": "path", "required": true, "type": "string" }
-        ],
-        "responses": {
-          "200": { "description": "OK" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
-        },
-        "tags": ["User"]
-      }
-    },
-    "/users": {
       "post": {
+        "summary": "Creates a new user",
         "description": "Create a new user",
         "parameters": [
           {
@@ -93,14 +51,79 @@
           }
         ],
         "responses": {
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" }
+          "200": { "description": "User created" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["User"]
+      },
+      "get": {
+        "summary": "Lists all users ",
+        "description": "Gets a list of users",
+        "responses": {
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Lists a specific user by its ID",
+        "description": "Get a user by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "User not Found" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["User"]
+      },
+      "put": {
+        "summary": "Updates a specific user by its ID",
+        "description": "Update a user by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "example": "John Doe (updated)" },
+                "email": { "example": "john.doeupdated@example.com" },
+                "password": { "example": "newpassword123" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" }
+        },
+        "tags": ["User"]
+      },
+      "delete": {
+        "summary": "Deletes a specific user by its ID",
+        "description": "Delete a user by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         },
         "tags": ["User"]
       }
     },
     "/users/disable/{id}": {
       "put": {
+        "summary": "Disables a specific user by its ID",
         "description": "Disable a user by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" }
@@ -114,15 +137,8 @@
       }
     },
     "/products/": {
-      "get": {
-        "description": "Get a list of products",
-        "responses": {
-          "200": { "description": "OK" },
-          "500": { "description": "Internal Server Error" }
-        },
-        "tags": ["Product"]
-      },
       "post": {
+        "summary": "Creates a new product",
         "description": "Create a new product",
         "parameters": [
           {
@@ -132,7 +148,7 @@
               "type": "object",
               "properties": {
                 "amount": { "example": 10 },
-                "name": { "example": "Product A" },
+                "name": { "example": "Product Name" },
                 "purchaseValue": { "example": 50.0 },
                 "saleValue": { "example": 80.0 }
               }
@@ -144,22 +160,33 @@
           "400": { "description": "Bad Request" }
         },
         "tags": ["Product"]
+      },
+      "get": {
+        "summary": "Lists all products",
+        "description": "Get a list of products",
+        "responses": {
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Product"]
       }
     },
     "/products/{id}": {
       "get": {
+        "summary": "Lists a specific product by its ID",
         "description": "Get a product by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
           "200": { "description": "OK" },
-          "404": { "description": "Not Found" },
+          "404": { "description": "Product Not Found" },
           "500": { "description": "Internal Server Error" }
         },
         "tags": ["Product"]
       },
       "put": {
+        "summary": "Updates a specific product by its ID",
         "description": "Update a product by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" },
@@ -170,7 +197,7 @@
               "type": "object",
               "properties": {
                 "amount": { "example": 15 },
-                "name": { "example": "Updated Product A" },
+                "name": { "example": "Product Name (updated)" },
                 "purchaseValue": { "example": 60.0 },
                 "saleValue": { "example": 90.0 }
               }
@@ -185,6 +212,7 @@
         "tags": ["Product"]
       },
       "delete": {
+        "summary": "Deletes a specific product by its ID",
         "description": "Delete a product by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" }
@@ -198,16 +226,9 @@
       }
     },
     "/charges/": {
-      "get": {
-        "description": "Get a list of charges",
-        "responses": {
-          "200": { "description": "OK" },
-          "500": { "description": "Internal Server Error" }
-        },
-        "tags": ["Charge"]
-      },
       "post": {
-        "description": "Create a new charge",
+        "summary": "Creates a new charge (Tax or Discount)",
+        "description": "Create a new charge (P.S: type '0' is for 'Tax' and '1' is for 'discount' ",
         "parameters": [
           {
             "name": "body",
@@ -227,10 +248,20 @@
           "400": { "description": "Bad Request" }
         },
         "tags": ["Charge"]
+      },
+      "get": {
+        "summary": "Lists all charges",
+        "description": "Get a list of charges",
+        "responses": {
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Charge"]
       }
     },
     "/charges/{id}": {
       "get": {
+        "summary": "Lists a specific charge by its ID",
         "description": "Get a charge by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" }
@@ -243,6 +274,7 @@
         "tags": ["Charge"]
       },
       "put": {
+        "summary": "Updates a specific charge by its ID",
         "description": "Update a charge by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" },
@@ -252,7 +284,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": { "example": "IOF (Atualizado)" },
+                "name": { "example": "IOF (Updated)" },
                 "value": { "example": 1.0 },
                 "type": { "example": 0 }
               }
@@ -267,6 +299,7 @@
         "tags": ["Charge"]
       },
       "delete": {
+        "summary": "Deletes a specific charge by its ID",
         "description": "Delete a charge by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" }
@@ -280,15 +313,8 @@
       }
     },
     "/sales/": {
-      "get": {
-        "description": "Get a list of sales",
-        "responses": {
-          "200": { "description": "OK" },
-          "500": { "description": "Internal Server Error" }
-        },
-        "tags": ["Sale"]
-      },
       "post": {
+        "summary": "Creates a new sale",
         "description": "Create a new sale",
         "parameters": [
           {
@@ -297,9 +323,35 @@
             "schema": {
               "type": "object",
               "properties": {
-                "products": { "example": ["Product A", "Product B"] },
-                "charges": { "example": [0, 1] }
-              }
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string", "example": "ProductId1" },
+                      "amount": { "type": "integer", "example": 5 }
+                    },
+                    "required": ["id", "amount"]
+                  },
+                  "example": [
+                    { "id": "ProductId1", "amount": 5 },
+                    { "id": "ProductId2", "amount": 1 }
+                  ]
+                },
+                "charges": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "ChargeId1"
+                  }
+                }
+              },
+              "required": ["products"],
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ]
             }
           }
         ],
@@ -310,8 +362,18 @@
         "tags": ["Sale"]
       }
     },
+    "get": {
+      "summary": "Lists all sales",
+      "description": "Get a list of sales",
+      "responses": {
+        "200": { "description": "OK" },
+        "500": { "description": "Internal Server Error" }
+      },
+      "tags": ["Sale"]
+    },
     "/sales/{id}": {
       "get": {
+        "summary": "Lists a specific sale by its ID",
         "description": "Get a sale by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" }
@@ -324,18 +386,42 @@
         "tags": ["Sale"]
       },
       "put": {
+        "summary": "Updates a specific charge by its ID",
         "description": "Update a sale by ID",
         "parameters": [
-          { "name": "id", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "products": { "example": ["Updated Product A", "Product B"] },
-                "charges": { "example": [0, 1] }
-              }
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "UpdatedProductId1"
+                      },
+                      "amount": { "type": "integer", "example": 4 }
+                    },
+                    "required": ["id", "amount"]
+                  },
+                  "example": [
+                    { "id": "UpdatedProductId1", "amount": 4 },
+                    { "id": "UpdatedProductId2", "amount": 3 }
+                  ]
+                },
+                "charges": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "ChargeId1"
+                  }
+                }
+              },
+              "required": ["products"]
             }
           }
         ],
@@ -347,6 +433,7 @@
         "tags": ["Sale"]
       },
       "delete": {
+        "summary": "Deletes a specific sale by its ID",
         "description": "Delete a sale by ID",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "type": "string" }
@@ -361,6 +448,7 @@
     },
     "/login": {
       "post": {
+        "summary": "Authenticate a new user",
         "description": "Authenticate a user",
         "parameters": [
           {
@@ -379,11 +467,13 @@
           "200": { "description": "OK" },
           "401": { "description": "Unauthorized" },
           "500": { "description": "Internal Server Error" }
-        }
+        },
+        "tags": ["Authorization"]
       }
     },
     "/recurso-protegido": {
       "post": {
+        "summary": "Access a protected resource",
         "description": "Access a protected resource",
         "parameters": [
           { "name": "authorization", "in": "header", "type": "string" }
@@ -392,7 +482,8 @@
           "200": { "description": "OK" },
           "401": { "description": "Unauthorized" },
           "403": { "description": "Forbidden" }
-        }
+        },
+        "tags": ["Authorization"]
       }
     }
   }
