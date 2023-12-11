@@ -58,7 +58,7 @@ const verifyProductsAndGetSum = async (
 };
 
 const verifyChargesAndGetSum = async (
-  saleCharges: string[],
+  saleCharges: string[] | undefined,
   totalProductsValue: number
 ): Promise<number | undefined> => {
   const hasCharges = saleCharges && saleCharges.length !== 0;
@@ -91,7 +91,9 @@ const getTotalSaleValue = (
   totalProductsValue: number,
   totalChargesValue: number | undefined
 ): number => {
-  const totalSaleValue = totalProductsValue + totalChargesValue;
+  const chargesMultiplier =
+    totalChargesValue !== undefined ? 1 + totalChargesValue / 100 : 1;
+  const totalSaleValue = totalProductsValue * chargesMultiplier;
   return totalSaleValue > 0 ? totalSaleValue : 0; // Garante que o valor total não seja negativo
 };
 
