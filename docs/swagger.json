@@ -237,7 +237,7 @@
               "type": "object",
               "properties": {
                 "name": { "example": "IOF" },
-                "value": { "example": 0.5 },
+                "value": { "example": 13 },
                 "type": { "example": 0 }
               }
             }
@@ -285,7 +285,7 @@
               "type": "object",
               "properties": {
                 "name": { "example": "IOF (Updated)" },
-                "value": { "example": 1.0 },
+                "value": { "example": 25 },
                 "type": { "example": 0 }
               }
             }
@@ -313,6 +313,15 @@
       }
     },
     "/sales/": {
+      "get": {
+        "summary": "Lists all sales",
+        "description": "Get a list of sales",
+        "responses": {
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        },
+        "tags": ["Sale"]
+      },
       "post": {
         "summary": "Creates a new sale",
         "description": "Create a new sale",
@@ -361,15 +370,6 @@
         },
         "tags": ["Sale"]
       }
-    },
-    "get": {
-      "summary": "Lists all sales",
-      "description": "Get a list of sales",
-      "responses": {
-        "200": { "description": "OK" },
-        "500": { "description": "Internal Server Error" }
-      },
-      "tags": ["Sale"]
     },
     "/sales/{id}": {
       "get": {
