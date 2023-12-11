@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../controller/authController";
 
 import { authenticateToken } from "../authentication/authMiddleware";
+import { AuthenticatedRequest } from "../authentication/authenticatedRequest";
 import * as bcrypt from "bcrypt";
 import { generateToken } from "../authentication/jwtUtils";
 import {
@@ -48,31 +49,35 @@ router.delete("/users/:id", deleteUser);
 router.put("/users/disable/:id", disableUser);
 
 //Products routes
-router.get("/products/", getAllProducts);
-router.get("/products/:id", getProductById);
-router.post("/products/", createProduct);
-router.put("/products/:id", updateProduct);
-router.delete("/products/:id", deleteProduct);
+router.get("/products/", authenticateToken, getAllProducts);
+router.get("/products/:id", authenticateToken, getProductById);
+router.post("/products/", authenticateToken, createProduct);
+router.put("/products/:id", authenticateToken, updateProduct);
+router.delete("/products/:id", authenticateToken, deleteProduct);
 
 //Charge routes
-router.get("/charges/", getAllCharges);
-router.get("/charges/:id", getChargeById);
-router.post("/charges/", createCharge);
-router.put("/charges/:id", updateCharge);
-router.delete("/charges/:id", deleteCharge);
+router.get("/charges/", authenticateToken, getAllCharges);
+router.get("/charges/:id", authenticateToken, getChargeById);
+router.post("/charges/", authenticateToken, createCharge);
+router.put("/charges/:id", authenticateToken, updateCharge);
+router.delete("/charges/:id", authenticateToken, deleteCharge);
 
 //Sale routes
 
-router.get("/sales/", getAllSales);
-router.get("/sales/:id", getSaleById);
-router.post("/sales/", createSale);
-router.put("/sales/:id", updateSale);
-router.delete("/sales/:id", deleteSale);
+router.get("/sales/", authenticateToken, getAllSales);
+router.get("/sales/:id", authenticateToken, getSaleById);
+router.post("/sales/", authenticateToken, createSale);
+router.put("/sales/:id", authenticateToken, updateSale);
+router.delete("/sales/:id", authenticateToken, deleteSale);
 
 //Autenticação
 router.post("/login", authenticate);
 
-router.post("/recurso-protegido", authenticateToken, (req, res) => {
-  // Se chegou até aqui, o token foi validado
-  res.json({ message: "Recurso protegido", user: (req as any).user });
-});
+router.post(
+  "/recurso-protegido",
+  authenticateToken,
+  (req: AuthenticatedRequest, res) => {
+    // Se chegou até aqui, o token foi validado
+    res.json({ message: "Recurso protegido", user: req.user });
+  }
+);

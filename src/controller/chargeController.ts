@@ -2,17 +2,16 @@ import { Request, Response } from "express";
 import Charge, { ChargeTypes } from "../models/Charge";
 import { v4 as uuidv4 } from "uuid";
 
-const validateChargeValue = (res: Response, value: any) => {
+import { AuthenticatedRequest } from "../authentication/authMiddleware";
+
+const validateChargeValue = (value: any) => {
   const isValidValue = typeof value === "number" && value > 0 && value <= 100;
 
   if (!isValidValue)
-    res.status(400).json({
-      message: `Valor do encargo deve ser maior que 0 e menor que 100. Valor: ${value}`,
-    });
+    throw new Error(`Encargo já cadastrado com todos os valores fornecidos.`);
 };
 
 const validateChargeObject = async (
-  res: Response,
   name: string,
   value: number
 ): Promise<void> => {
@@ -20,28 +19,31 @@ const validateChargeObject = async (
     const chargeResult = await Charge.searchByNameAndValue(name, value);
 
     if (chargeResult.length > 0)
-      res.status(400).json({
-        message: `Encargo já cadastrado com todos os valores fornecidos.`,
-      });
+      throw new Error(`Encargo já cadastrado com todos os valores fornecidos.`);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    throw error;
   }
 };
 
-const validateChargeType = (res: Response, type: ChargeTypes) => {
+const validateChargeType = (type: ChargeTypes) => {
   if (
     typeof type !== "number" ||
     (type !== ChargeTypes.Tax && type !== ChargeTypes.Discount)
   ) {
-    res.status(400).json({
-      message: `Tipo de encargo invalido. Tipo fornecido: ${type}`,
-    });
+    throw new Error(`Tipo de encargo invalido. Tipo fornecido: ${type}`);
   }
 };
 
-export const getAllCharges = async (_req: Request, res: Response) => {
+export const getAllCharges = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  const userId = req.user?.userId;
   try {
-    const charges = await Charge.findAll();
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+    const charges = await Charge.findAll({ where: { userId } });
 
     res.json(charges);
   } catch (error) {
@@ -49,10 +51,17 @@ export const getAllCharges = async (_req: Request, res: Response) => {
   }
 };
 
-export const getChargeById = async (req: Request, res: Response) => {
+export const getChargeById = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
   const { id } = req.params;
+  const userId = req.user?.userId;
   try {
-    const charge = await Charge.findByPk(id);
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+    const charge = await Charge.findOne({ where: { id, userId } });
     if (charge) {
       res.json(charge);
     } else {
@@ -63,16 +72,30 @@ export const getChargeById = async (req: Request, res: Response) => {
   }
 };
 
-export const createCharge = async (req: Request, res: Response) => {
+export const createCharge = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  const userId = req.user?.userId;
   const { name, value, type } = req.body;
 
-  validateChargeValue(res, value);
-  validateChargeType(res, type);
-
-  await validateChargeObject(res, name as string, value as number);
-
   try {
-    const newCharge = await Charge.create({ id: uuidv4(), name, type, value });
+    validateChargeValue(value);
+    validateChargeType(type);
+
+    await validateChargeObject(name as string, value as number);
+
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+
+    const newCharge = await Charge.create({
+      id: uuidv4(),
+      name,
+      type,
+      value,
+      userId,
+    });
 
     res.status(201).json(newCharge);
   } catch (error) {
@@ -80,20 +103,27 @@ export const createCharge = async (req: Request, res: Response) => {
   }
 };
 
-export const updateCharge = async (req: Request, res: Response) => {
+export const updateCharge = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
   const { id } = req.params;
-
+  const userId = req.user?.userId;
   const { name, value, type } = req.body;
 
-  validateChargeValue(res, value);
-  validateChargeType(res, type);
-
-  await validateChargeObject(res, name as string, value as number);
-
   try {
+    validateChargeValue(value);
+    validateChargeType(type);
+
+    await validateChargeObject(name as string, value as number);
+
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+
     const [count] = await Charge.update(
       { name, type, value },
-      { where: { id } }
+      { where: { id, userId } }
     );
 
     if (count > 0) {
@@ -108,14 +138,21 @@ export const updateCharge = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteCharge = async (req: Request, res: Response) => {
+export const deleteCharge = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
   const { id } = req.params;
+  const userId = req.user?.userId;
 
   try {
-    const deletedCharge = await Charge.findByPk(id);
+    if (!userId) {
+      return res.status(401).json({ message: "Usuário não autenticado" });
+    }
+    const deletedCharge = await Charge.findOne({ where: { id, userId } });
 
     if (deletedCharge) {
-      await Charge.destroy({ where: { id } });
+      await Charge.destroy({ where: { id, userId } });
 
       res.json(deletedCharge);
     } else {

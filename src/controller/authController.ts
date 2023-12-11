@@ -13,7 +13,7 @@ export const authenticate = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Credenciais inválidas" });
     }
 
-    const token = generateToken({ email: user.email });
+    const token = generateToken({ email: user.email, userId: user.id });
     console.log("Token gerado:", token);
 
     res.json({ token });

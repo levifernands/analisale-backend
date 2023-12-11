@@ -15,6 +15,7 @@ interface SaleAttributes {
   products: SaleProduct[];
   charges: string[];
   totalPrice: number;
+  userId: number;
 }
 
 class Sale extends Model<SaleAttributes> implements SaleAttributes {
@@ -22,6 +23,7 @@ class Sale extends Model<SaleAttributes> implements SaleAttributes {
   public products!: SaleProduct[];
   public charges!: string[];
   public totalPrice!: number;
+  public userId!: number;
 }
 
 Sale.init(
@@ -65,6 +67,8 @@ Sale.init(
               throw new Error(
                 'Cada item em "products" deve ter a propriedade "amount" > 0 e != NULL.'
               );
+            // Aqui você deve implementar a lógica para verificar se o product.id existe no banco de dados.
+            // Você também precisa verificar a regra de quantidade (product.amount <= quantidade disponível no banco).
           }
         },
       },
@@ -94,6 +98,10 @@ Sale.init(
           }
         },
       },
+    },
+    userId: {
+      type: DataTypes.INTEGER, // Conforme a abstração
+      allowNull: false,
     },
   },
   {

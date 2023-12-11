@@ -11,6 +11,7 @@ interface ChargeAttributes {
   name: string;
   value: number;
   type: ChargeTypes;
+  userId: number;
 }
 
 class Charge extends Model<ChargeAttributes> implements ChargeAttributes {
@@ -18,6 +19,7 @@ class Charge extends Model<ChargeAttributes> implements ChargeAttributes {
   public name!: string;
   public value!: number;
   public type!: ChargeTypes;
+  public userId!: number;
 
   static searchByNameAndValue: (
     name: string,
@@ -61,6 +63,10 @@ Charge.init(
         },
       },
     },
+    userId: {
+      type: DataTypes.INTEGER, // Conforme a abstração
+      allowNull: false,
+    },
   },
   {
     sequelize,
@@ -75,7 +81,7 @@ Charge.searchByNameAndValue = async (
   return Charge.findAll({
     where: {
       name: {
-        [Op.iLike]: `%${name}%`,
+        [Op.like]: `%${name}%`,
       },
       value: {
         [Op.eq]: value,

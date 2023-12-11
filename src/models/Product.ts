@@ -7,6 +7,7 @@ interface ProductAttributes {
   purchaseValue: number; // Conforme a abstração
   amount: number;
   saleValue: number; // Conforme a abstração
+  userId: number;
 }
 
 class Product extends Model<ProductAttributes> implements ProductAttributes {
@@ -15,6 +16,7 @@ class Product extends Model<ProductAttributes> implements ProductAttributes {
   public name!: string;
   public purchaseValue!: number;
   public saleValue!: number;
+  public userId!: number;
 
   static searchByName: (name: string) => Promise<Product[]>;
 }
@@ -67,6 +69,10 @@ Product.init(
           }
         },
       },
+    },
+    userId: {
+      type: DataTypes.INTEGER, // Conforme a abstração
+      allowNull: false,
     },
   },
   {
