@@ -389,6 +389,7 @@
         "summary": "Updates a specific charge by its ID",
         "description": "Update a sale by ID",
         "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",

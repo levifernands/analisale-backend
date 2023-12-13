@@ -5,22 +5,48 @@ import Charge, { ChargeTypes } from "../models/Charge";
 import { v4 as uuidv4 } from "uuid";
 import { AuthenticatedRequest } from "../authentication/authMiddleware";
 
-const updateStock = async (saleProducts: SaleProduct[]): Promise<void> => {
-  for (const product of saleProducts) {
-    try {
+const updateStock = async (
+  saleProducts: SaleProduct[],
+  oldSaleProducts?: SaleProduct[]
+): Promise<void> => {
+  try {
+    for (const product of saleProducts) {
       const productInDatabase = await Product.findByPk(product.id);
 
       if (!productInDatabase) {
         throw new Error(`Produto com ID ${product.id} não encontrado`);
       }
 
-      productInDatabase.amount -= product.amount;
+      let quantityChange = product.amount;
+
+      if (oldSaleProducts) {
+        const oldProduct = oldSaleProducts.find((p) => p.id === product.id);
+
+        if (oldProduct) {
+          // Se for uma atualização, ajusta a quantidade
+          quantityChange -= oldProduct.amount;
+        }
+      }
+
+      // Verifica se há estoque suficiente
+      if (quantityChange > productInDatabase.amount) {
+        throw new Error(
+          `Produto com id ${product.id} não possui ${quantityChange} unidades em estoque.`
+        );
+      }
+      // Adiciona ou subtrai a quantidade conforme a operação
+      productInDatabase.amount -= quantityChange;
+
+      // Se a quantidade restante no estoque for 0, atualiza o estoque para 0
+      if (productInDatabase.amount === 0) {
+        productInDatabase.amount = 0;
+      }
 
       await productInDatabase.save();
-    } catch (error) {
-      console.error(`Erro ao atualizar o estoque do produto: ${error.message}`);
-      throw error;
     }
+  } catch (error) {
+    console.error(`Erro ao atualizar o estoque do produto: ${error.message}`);
+    throw error;
   }
 };
 
@@ -38,12 +64,6 @@ const verifyProductsAndGetSum = async (
 
       if (!productSale) {
         throw new Error(`Produto com ID ${product.id} não encontrado`);
-      }
-
-      if (productSale.amount < product.amount) {
-        throw new Error(
-          `Produto com id ${product.id} não possui ${product.amount} unidades em estoque.`
-        );
       }
 
       totalProductsValue += productSale.saleValue * product.amount;
@@ -133,6 +153,7 @@ export const createSale = async (req: AuthenticatedRequest, res: Response) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 export const getAllSales = async (req: AuthenticatedRequest, res: Response) => {
   const userId = req.user?.userId;
   try {
@@ -179,6 +200,17 @@ export const updateSale = async (req: AuthenticatedRequest, res: Response) => {
     if (!userId) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
+
+    const oldSale = await Sale.findByPk(id);
+
+    if (!oldSale) {
+      return res
+        .status(404)
+        .json({ message: `Venda com id: ${id} não encontrada` });
+    }
+
+    const oldSaleProducts = oldSale.products as SaleProduct[];
+
     const totalProductsValue = await verifyProductsAndGetSum(saleProducts);
     const totalChargesValue = await verifyChargesAndGetSum(
       saleCharges,
@@ -189,6 +221,8 @@ export const updateSale = async (req: AuthenticatedRequest, res: Response) => {
       totalProductsValue,
       totalChargesValue
     );
+
+    await updateStock(saleProducts, oldSaleProducts);
 
     const [count] = await Sale.update(
       {
